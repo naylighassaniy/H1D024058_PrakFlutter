@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:belajarflutter/ui/produk_page.dart';
+import 'package:belajarflutter/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Aplikasi Flutter Pertama",
-      home: ProdukPage(),
+      title: 'Flutter Menu',
+      home: LoginPage(),
     );
   }
 }
