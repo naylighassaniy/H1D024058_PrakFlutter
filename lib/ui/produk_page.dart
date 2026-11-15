@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:belajarflutter/hello_world.dart';
-import 'package:belajarflutter/column_widget.dart';
-import 'package:belajarflutter/row_widget.dart';
+import 'package:belajarflutter/model/produk.dart';
+import 'package:belajarflutter/ui/produk_detail.dart';
 import 'package:belajarflutter/ui/produk_form.dart';
+import 'package:belajarflutter/ui/login_page.dart';
+import 'package:belajarflutter/ui/registrasi_page.dart';
 
 class ProdukPage extends StatefulWidget {
   const ProdukPage({super.key});
@@ -16,107 +17,123 @@ class _ProdukPageState extends State<ProdukPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List Data Produk'),
+        title: const Text('List Produk'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: 'Tambah Produk',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProdukForm()),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              child: const Icon(Icons.add, size: 26.0),
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProdukForm()),
+                );
+              },
+            ),
           ),
         ],
       ),
       drawer: Drawer(
         child: ListView(
-          padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(color: Colors.blue),
               child: Text(
-                'Menu\nPemrograman Mobile',
+                'Menu Toko',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.text_fields),
-              title: const Text('Hello World'),
+              leading: const Icon(Icons.login),
+              title: const Text('Login'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const HelloWorld()),
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               },
             ),
             ListTile(
-              leading: const Icon(Icons.view_column),
-              title: const Text('Widget Column'),
+              leading: const Icon(Icons.person_add),
+              title: const Text('Registrasi'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const ColumnWidget()),
+                  MaterialPageRoute(builder: (context) => const RegistrasiPage()),
                 );
               },
             ),
+            const Divider(),
             ListTile(
-              leading: const Icon(Icons.table_rows),
-              title: const Text('Widget Row'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
+              title: const Text('Logout'),
+              trailing: const Icon(Icons.logout),
+              onTap: () async {
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => const RowWidget()),
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.edit_note),
-              title: const Text('Form Produk'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProdukForm()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.list),
-              title: const Text('List Data Produk'),
-              selected: true,
-              onTap: () {
-                Navigator.pop(context);
               },
             ),
           ],
         ),
       ),
       body: ListView(
-        children: const [
-          Card(
-            child: ListTile(
-              title: Text('Kulkas'),
-              subtitle: Text('30000'),
+        children: [
+          ItemProduk(
+            produk: Produk(
+              id: 1,
+              kodeProduk: 'A001',
+              namaProduk: 'Kamera',
+              hargaProduk: 5000000,
             ),
           ),
-          Card(
-            child: ListTile(
-              title: Text('Playstation'),
-              subtitle: Text('30000'),
+          ItemProduk(
+            produk: Produk(
+              id: 2,
+              kodeProduk: 'A002',
+              namaProduk: 'Kulkas',
+              hargaProduk: 2500000,
             ),
           ),
-          Card(
-            child: ListTile(
-              title: Text('Radio'),
-              subtitle: Text('30000'),
+          ItemProduk(
+            produk: Produk(
+              id: 3,
+              kodeProduk: 'A003',
+              namaProduk: 'Mesin Cuci',
+              hargaProduk: 2000000,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ItemProduk extends StatelessWidget {
+  final Produk produk;
+
+  const ItemProduk({super.key, required this.produk});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProdukDetail(
+              produk: produk,
+            ),
+          ),
+        );
+      },
+      child: Card(
+        child: ListTile(
+          title: Text(produk.namaProduk ?? ''),
+          subtitle: Text(produk.hargaProduk?.toString() ?? ''),
+        ),
       ),
     );
   }

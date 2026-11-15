@@ -30,3 +30,17 @@
 | Sidemenu | About Page |
 | :---: | :---: |
 | <img src="screenshots/sidemenu.png" width="220" alt="Sidemenu" /> | <img src="screenshots/about.png" width="220" alt="About Page" /> |
+
+---
+
+## Modul 4 - Operasi CRUD dengan API CodeIgniter 4
+
+### Screenshot Hasil Modul 4
+
+| Registrasi | Login | List Produk | Tambah Produk |
+| :---: | :---: | :---: | :---: |
+| <img src="screenshots/registrasi.png" width="170" alt="Registrasi" /> | <img src="screenshots/login_tokokita.png" width="170" alt="Login" /> | <img src="screenshots/list_produk_m4.png" width="170" alt="List Produk" /> | <img src="screenshots/tambah_produk.png" width="170" alt="Tambah Produk" /> |
+
+| Detail Produk | Ubah Produk | Hapus Produk |
+| :---: | :---: | :---: |
+| <img src="screenshots/detail_produk_m4.png" width="220" alt="Detail Produk" /> | <img src="screenshots/ubah_produk.png" width="220" alt="Ubah Produk" /> | <img src="screenshots/hapus_produk.png" width="220" alt="Hapus Produk" /> |
