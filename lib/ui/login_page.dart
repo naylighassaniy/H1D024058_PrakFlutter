@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:belajarflutter/ui/registrasi_page.dart';
+import 'package:belajarflutter/bloc/login_bloc.dart';
+import 'package:belajarflutter/helpers/user_info.dart';
 import 'package:belajarflutter/ui/produk_page.dart';
+import 'package:belajarflutter/ui/registrasi_page.dart';
+import 'package:belajarflutter/widget/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,18 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // ignore: unused_field, prefer_final_fields
   bool _isLoading = false;
 
   final _emailTextboxController = TextEditingController();
   final _passwordTextboxController = TextEditingController();
-
-  @override
-  void dispose() {
-    _emailTextboxController.dispose();
-    _passwordTextboxController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +34,11 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 _emailTextField(),
                 _passwordTextField(),
-                const SizedBox(height: 20),
                 _buttonLogin(),
-                const SizedBox(height: 30),
-                _menuRegistrasi(),
+                const SizedBox(
+                  height: 30,
+                ),
+                _menuRegistrasi()
               ],
             ),
           ),
@@ -51,15 +47,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Membuat Textbox email
+  //Membuat Textbox email
   Widget _emailTextField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: "Email"),
       keyboardType: TextInputType.emailAddress,
       controller: _emailTextboxController,
       validator: (value) {
-        // validasi harus diisi
-        if (value == null || value.isEmpty) {
+        if (value!.isEmpty) {
           return 'Email harus diisi';
         }
         return null;
@@ -67,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Membuat Textbox password
+  //Membuat Textbox password
   Widget _passwordTextField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: "Password"),
@@ -75,8 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: true,
       controller: _passwordTextboxController,
       validator: (value) {
-        // jika karakter yang dimasukkan kurang dari 6 karakter
-        if (value == null || value.isEmpty) {
+        if (value!.isEmpty) {
           return "Password harus diisi";
         }
         return null;
@@ -84,20 +78,48 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Membuat Tombol Login
+  //Membuat Tombol Login
   Widget _buttonLogin() {
     return ElevatedButton(
       child: const Text("Login"),
       onPressed: () {
         var validate = _formKey.currentState!.validate();
         if (validate) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const ProdukPage()),
-          );
+          if (!_isLoading) _submit();
         }
       },
     );
+  }
+
+  void _submit() {
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+    LoginBloc.login(
+      email: _emailTextboxController.text,
+      password: _passwordTextboxController.text,
+    ).then((value) async {
+      await UserInfo().setToken(value.token.toString());
+      await UserInfo().setUserID(int.parse(value.userID.toString()));
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ProdukPage()),
+      );
+    }, onError: (error) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => const WarningDialog(
+          description: "Login gagal, silahkan coba lagi",
+        ),
+      );
+    });
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   // Membuat menu untuk membuka halaman registrasi

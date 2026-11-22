@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:belajarflutter/bloc/produk_bloc.dart';
 import 'package:belajarflutter/model/produk.dart';
 import 'package:belajarflutter/ui/produk_form.dart';
+import 'package:belajarflutter/ui/produk_page.dart';
+import 'package:belajarflutter/widget/warning_dialog.dart';
 
 class ProdukDetail extends StatefulWidget {
   final Produk? produk;
@@ -37,7 +40,7 @@ class _ProdukDetailState extends State<ProdukDetail> {
               style: const TextStyle(fontSize: 18.0),
             ),
             const SizedBox(height: 20),
-            _tombolHapusEdit(),
+            _tombolHapusEdit()
           ],
         ),
       ),
@@ -48,12 +51,8 @@ class _ProdukDetailState extends State<ProdukDetail> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Tombol Edit
+        //Tombol Edit
         OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-          ),
           child: const Text("EDIT"),
           onPressed: () {
             Navigator.push(
@@ -67,12 +66,8 @@ class _ProdukDetailState extends State<ProdukDetail> {
           },
         ),
         const SizedBox(width: 10),
-        // Tombol Hapus
+        //Tombol Hapus
         OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-          ),
           child: const Text("DELETE"),
           onPressed: () => confirmHapus(),
         ),
@@ -84,19 +79,37 @@ class _ProdukDetailState extends State<ProdukDetail> {
     AlertDialog alertDialog = AlertDialog(
       content: const Text("Yakin ingin menghapus data ini?"),
       actions: [
-        // tombol hapus
+        //tombol hapus
         OutlinedButton(
           child: const Text("Ya"),
           onPressed: () {
-            Navigator.pop(context); // tutup dialog
-            Navigator.pop(context); // kembali ke list
+            if (widget.produk?.id != null) {
+              ProdukBloc.deleteProduk(id: widget.produk!.id).then((value) {
+                if (!mounted) return;
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const ProdukPage()),
+                  (Route<dynamic> route) => false,
+                );
+              }, onError: (error) {
+                if (!mounted) return;
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => const WarningDialog(
+                    description: "Hapus data gagal, silahkan coba lagi",
+                  ),
+                );
+              });
+            } else {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
           },
         ),
-        // tombol batal
+        //tombol batal
         OutlinedButton(
           child: const Text("Batal"),
           onPressed: () => Navigator.pop(context),
-        ),
+        )
       ],
     );
 

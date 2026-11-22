@@ -1,25 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:belajarflutter/helpers/user_info.dart';
+import 'package:belajarflutter/ui/login_page.dart';
 import 'package:belajarflutter/ui/produk_page.dart';
-// import 'package:belajarflutter/ui/login_page.dart';
-// import 'package:belajarflutter/ui/registrasi_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Widget page = const CircularProgressIndicator();
+
+  @override
+  void initState() {
+    super.initState();
+    isLogin();
+  }
+
+  void isLogin() async {
+    var token = await UserInfo().getToken();
+    if (token != null) {
+      setState(() {
+        page = const ProdukPage();
+      });
+    } else {
+      setState(() {
+        page = const LoginPage();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp(
       title: 'Toko Kita',
-      // Modul 4 - Alur Utama:
-      home: ProdukPage(),
-      // Atau bisa langsung membuka halaman Login / Registrasi:
-      // home: LoginPage(),
-      // home: RegistrasiPage(),
+      debugShowCheckedModeBanner: false,
+      home: page,
     );
   }
 }

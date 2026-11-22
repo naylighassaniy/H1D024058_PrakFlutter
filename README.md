@@ -44,3 +44,17 @@
 | Detail Produk | Ubah Produk | Hapus Produk |
 | :---: | :---: | :---: |
 | <img src="screenshots/detail_produk_m4.png" width="220" alt="Detail Produk" /> | <img src="screenshots/ubah_produk.png" width="220" alt="Ubah Produk" /> | <img src="screenshots/hapus_produk.png" width="220" alt="Hapus Produk" /> |
+
+---
+
+## Modul 5 - Integrasi REST API dengan Flutter
+
+### Screenshot Hasil Modul 5
+
+| Registrasi Berhasil | Login Gagal | List Produk (API) | Tambah Produk |
+| :---: | :---: | :---: | :---: |
+| <img src="screenshots/registrasi_berhasil_m5.png" width="170" alt="Registrasi Berhasil" /> | <img src="screenshots/login_gagal_m5.png" width="170" alt="Login Gagal" /> | <img src="screenshots/list_produk_m5.png" width="170" alt="List Produk dari API" /> | <img src="screenshots/tambah_produk_m5.png" width="170" alt="Tambah Produk" /> |
+
+| List Setelah Tambah | Ubah Produk | Hapus Produk | List Setelah Hapus |
+| :---: | :---: | :---: | :---: |
+| <img src="screenshots/list_setelah_tambah_m5.png" width="170" alt="List Produk Setelah Tambah" /> | <img src="screenshots/ubah_produk_m5.png" width="170" alt="Ubah Produk" /> | <img src="screenshots/hapus_produk_m5.png" width="170" alt="Hapus Produk" /> | <img src="screenshots/list_setelah_hapus_m5.png" width="170" alt="List Produk Setelah Hapus" /> |

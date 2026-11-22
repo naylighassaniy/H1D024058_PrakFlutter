@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:belajarflutter/bloc/logout_bloc.dart';
+import 'package:belajarflutter/bloc/produk_bloc.dart';
 import 'package:belajarflutter/model/produk.dart';
+import 'package:belajarflutter/ui/login_page.dart';
 import 'package:belajarflutter/ui/produk_detail.dart';
 import 'package:belajarflutter/ui/produk_form.dart';
-import 'package:belajarflutter/ui/login_page.dart';
-import 'package:belajarflutter/ui/registrasi_page.dart';
 
 class ProdukPage extends StatefulWidget {
   const ProdukPage({super.key});
@@ -30,83 +31,59 @@ class _ProdukPageState extends State<ProdukPage> {
                 );
               },
             ),
-          ),
+          )
         ],
       ),
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                'Menu Toko',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.login),
-              title: const Text('Login'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person_add),
-              title: const Text('Registrasi'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RegistrasiPage()),
-                );
-              },
-            ),
-            const Divider(),
             ListTile(
               title: const Text('Logout'),
               trailing: const Icon(Icons.logout),
               onTap: () async {
+                await LogoutBloc.logout();
+                if (!context.mounted) return;
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
                 );
               },
-            ),
+            )
           ],
         ),
       ),
-      body: ListView(
-        children: [
-          ItemProduk(
-            produk: Produk(
-              id: 1,
-              kodeProduk: 'A001',
-              namaProduk: 'Kamera',
-              hargaProduk: 5000000,
-            ),
-          ),
-          ItemProduk(
-            produk: Produk(
-              id: 2,
-              kodeProduk: 'A002',
-              namaProduk: 'Kulkas',
-              hargaProduk: 2500000,
-            ),
-          ),
-          ItemProduk(
-            produk: Produk(
-              id: 3,
-              kodeProduk: 'A003',
-              namaProduk: 'Mesin Cuci',
-              hargaProduk: 2000000,
-            ),
-          ),
-        ],
+      body: FutureBuilder<List>(
+        future: ProdukBloc.getProduks(),
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListProduk(
+                  list: snapshot.data,
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                );
+        },
       ),
+    );
+  }
+}
+
+class ListProduk extends StatelessWidget {
+  final List? list;
+
+  const ListProduk({super.key, this.list});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: list == null ? 0 : list!.length,
+      itemBuilder: (context, i) {
+        return ItemProduk(
+          produk: list![i],
+        );
+      },
     );
   }
 }
